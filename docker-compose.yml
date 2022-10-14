@@ -1,0 +1,25 @@
+version: "3.7"
+
+services:
+
+  postgres:
+    image: postgres
+    volumes:
+      - ./docker/postgres:/data
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+    env_file: .env
+    environment:
+      - PGDATA=/data
+      - PGPORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
