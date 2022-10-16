@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -23,6 +24,7 @@ import { VerificationLevelRulesModule } from './workshop-step-ready/compliance/p
       inject: [ConfigService],
     }),
     UserModule,
+    EventEmitterModule.forRoot(),
     VerificationLevelRulesModule,
   ],
   controllers: [AppController],
