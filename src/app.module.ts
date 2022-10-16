@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/public/user.module';
+import { VerificationLevelRulesModule } from './workshop-step-ready/compliance/public/verification-level-rules.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UserModule } from './user/public/user.module';
       inject: [ConfigService],
     }),
     UserModule,
+    VerificationLevelRulesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

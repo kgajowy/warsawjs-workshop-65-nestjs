@@ -30,7 +30,7 @@ export class RequiredVerificationLevelService {
       }),
       new UserNationality({
         userNationality: userData.userNationality,
-        highRiskCountries: highRiskCountries,
+        highRiskCountries,
       }),
     ]);
 
