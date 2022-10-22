@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/public/user.module';
 import { VerificationLevelRulesModule } from './workshop-step-ready/compliance/public/verification-level-rules.module';
+import { SomeOtherModule } from './workshop-step-ready/some-other-module';
 
 @Module({
   imports: [
@@ -28,6 +29,6 @@ import { VerificationLevelRulesModule } from './workshop-step-ready/compliance/p
     VerificationLevelRulesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SomeOtherModule],
 })
 export class AppModule {}

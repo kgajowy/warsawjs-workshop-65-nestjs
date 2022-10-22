@@ -1,3 +1,4 @@
+import { highestOfRule, SomeRule } from './rules';
 import {
   VerificationLevel,
   VerificationLevelValue,
@@ -14,5 +15,9 @@ export class HighestOf implements VerificationRule {
         .sort(VerificationLevel.compareHighestOnTop)[0] ??
       new VerificationLevel(VerificationLevelValue.TIER_NONE)
     );
+  }
+
+  type(): SomeRule {
+    return highestOfRule;
   }
 }

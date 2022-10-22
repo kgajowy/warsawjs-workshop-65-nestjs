@@ -1,44 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { HighestOf } from '../../domain/highest-of';
-import { TransactionsCount } from '../../domain/transactions-count';
-import { TransactionsVolume } from '../../domain/transactions-volume';
-import { UserNationality } from '../../domain/user-nationality';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { VerificationLevelValue } from '../../domain/verification-level';
-import { HighRiskCountriesRepo } from '../interfaces/high-risk-countries.repo';
-import { UserDataRepo } from '../interfaces/user-data.repo';
-import { UserTransactionsRepo } from '../interfaces/user-transactions.repo';
+import {
+  VerificationLevelCalculated,
+  VerificationLevelCalculatedPayload,
+} from '../../public/verification-level-calculated';
+import { RulesFactory } from './rules-factory';
 
 @Injectable()
 export class RequiredVerificationLevelService {
   constructor(
-    private readonly userDataRepo: UserDataRepo,
-    private readonly transactionsRepo: UserTransactionsRepo,
-    private readonly highRiskCountriesRepo: HighRiskCountriesRepo,
+    private readonly rulesFactory: RulesFactory,
+    private readonly eventEmitter: EventEmitter2, // ideally, should be a port. Or hidden in persistence
   ) {}
 
   async getFor(userId: string): Promise<VerificationLevelValue> {
-    const userData = await this.userDataRepo.getFor(userId);
-    const transactionsData = await this.transactionsRepo.getFor(userId);
-    const highRiskCountries = await this.highRiskCountriesRepo.get();
-
-    const rule = new HighestOf([
-      new TransactionsCount({
-        count: transactionsData.count,
-      }),
-      new TransactionsVolume({
-        volumeInEuro: transactionsData.volumeInEuro,
-      }),
-      new UserNationality({
-        userNationality: userData.userNationality,
-        highRiskCountries,
-      }),
-    ]);
-
+    const rule = await this.rulesFactory.getFor(userId, 'private');
     const requiredVerification = rule.check();
 
     // log
     // persistence
     // error handling
+
+    const payload: VerificationLevelCalculatedPayload = {
+      userId,
+      value: requiredVerification.level,
+    };
+    this.eventEmitter.emit(VerificationLevelCalculated, payload);
+
+    // when we will write results to database?
+    // how to ensure it happens together? "transaction"
+    // but... what if emitting fails? it would make our microservice dependent on others!
+    // inbox / outbox pattern
 
     return requiredVerification.level;
   }

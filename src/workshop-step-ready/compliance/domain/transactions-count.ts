@@ -1,3 +1,4 @@
+import { SomeRule, transactionCountRule } from './rules';
 import {
   VerificationLevel,
   VerificationLevelValue,
@@ -25,5 +26,9 @@ export class TransactionsCount implements VerificationRule {
     }
 
     return new VerificationLevel(VerificationLevelValue.TIER_3);
+  }
+
+  type(): SomeRule {
+    return transactionCountRule;
   }
 }

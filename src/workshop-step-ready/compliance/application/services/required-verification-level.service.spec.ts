@@ -1,3 +1,4 @@
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test } from '@nestjs/testing';
 import {
   InMemoryHighCountries,
@@ -44,6 +45,12 @@ async function getFixtures() {
       {
         provide: HighRiskCountriesRepo,
         useClass: InMemoryHighCountries,
+      },
+      {
+        provide: EventEmitter2,
+        useValue: {
+          emit: jest.fn(),
+        },
       },
     ],
   }).compile();

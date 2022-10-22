@@ -1,3 +1,4 @@
+import { SomeRule, userNationalityRule } from './rules';
 import {
   VerificationLevel,
   VerificationLevelValue,
@@ -32,5 +33,9 @@ export class UserNationality implements VerificationRule {
       return new VerificationLevel(VerificationLevelValue.TIER_2);
     }
     return new VerificationLevel(VerificationLevelValue.TIER_NONE);
+  }
+
+  type(): SomeRule {
+    return userNationalityRule;
   }
 }
