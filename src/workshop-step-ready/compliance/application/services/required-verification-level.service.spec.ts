@@ -6,9 +6,11 @@ import {
 } from '../../infrastructure/in-memory/repos';
 import { VerificationLevelValue } from '../../public/verification-rules.service';
 import { HighRiskCountriesRepo } from '../interfaces/high-risk-countries.repo';
+import { ruleCreatorsToken } from '../interfaces/rule-creator';
 import { UserDataRepo } from '../interfaces/user-data.repo';
 import { UserTransactionsRepo } from '../interfaces/user-transactions.repo';
 import { RequiredVerificationLevelService } from './required-verification-level.service';
+import { RulesFactory } from './rules-factory';
 
 describe(RequiredVerificationLevelService.name, () => {
   let fixtures: Awaited<ReturnType<typeof getFixtures>>;
@@ -51,6 +53,12 @@ async function getFixtures() {
         useValue: {
           emit: jest.fn(),
         },
+      },
+      RulesFactory,
+      {
+        provide: ruleCreatorsToken,
+        useFactory: (...creators) => [...creators],
+        inject: [],
       },
     ],
   }).compile();

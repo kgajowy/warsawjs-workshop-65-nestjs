@@ -1,4 +1,5 @@
 import { HighestOf } from './highest-of';
+import { highestOfRule, SomeRule } from './rules';
 import {
   VerificationLevel,
   VerificationLevelValue,
@@ -41,5 +42,9 @@ class FixedVerificationLevel implements VerificationRule {
 
   check(): VerificationLevel {
     return this.level;
+  }
+
+  type(): SomeRule {
+    return highestOfRule;
   }
 }

@@ -15,9 +15,9 @@ export class RulesFactory {
     userKind: 'company' | 'private',
   ): Promise<VerificationRule> {
     const applicableRules = new UserKindPolicy(userKind).getRules();
-    const rulesCreators = applicableRules.map((rule) =>
-      this.creators.find((creator) => creator.type() === rule),
-    );
+    const rulesCreators = applicableRules
+      .map((rule) => this.creators.find((creator) => creator.type() === rule))
+      .filter((e) => !!e);
     const rules: VerificationRule[] = await Promise.all(
       rulesCreators.map((creator) => creator.create(userId)),
     );
