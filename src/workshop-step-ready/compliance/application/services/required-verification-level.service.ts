@@ -18,16 +18,15 @@ export class RequiredVerificationLevelService {
     const rule = await this.rulesFactory.getFor(userId, 'private');
     const requiredVerification = rule.check();
 
-    // log
-    // persistence
-    // error handling
+    {
+      // persistence - to our database
 
-    const payload: VerificationLevelCalculatedPayload = {
-      userId,
-      value: requiredVerification.level,
-    };
-    this.eventEmitter.emit(VerificationLevelCalculated, payload);
-
+      const payload: VerificationLevelCalculatedPayload = {
+        userId,
+        value: requiredVerification.level,
+      };
+      this.eventEmitter.emit(VerificationLevelCalculated, payload);
+    }
     // when we will write results to database?
     // how to ensure it happens together? "transaction"
     // but... what if emitting fails? it would make our microservice dependent on others!
